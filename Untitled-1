@@ -1,0 +1,75 @@
+README
+
+access data from your form everywhere in a easy manner, validate the data...
+
+Need to keep the data alive throughout the whole stage.
+
+two objects can be alive at two different time using the same value... <== fuck that shit
+
+
+
+<FormContext ...props ( multi part / onSubmit ) >
+    <PartialValidation keepAlive>
+        <Field />
+        <ValidateAndPrevious />
+        <ValidateAndNext />
+    </PartialValidation>
+    
+    <PartialValidation>
+    </PartialValidation>
+
+    <Field />
+    <Field />
+    <ValidateAllAndSubmit />
+</FormComponent>
+
+
+satisfy two behaviors: 
+ - scroll between windows with unmount (keepalive, use a second storage containing only the defined values (even null) of all displayed components)
+ - scroll between windows without unmount (valide only the fields inside PartialValidation)
+
+validation should happen from the data previously registered
+
+finding a way to reinit the data if the stuff change ==> use context data and reload the data inside the context
+
+
+@FormContext or something like formContext()(Component)
+plug with context.data and context.functions
+
+
+functions: 
+    - keep data value alive (in case of unmount)
+    - validate: valide the whole form or Partial
+    - submit: trigger onSubmit
+
+data representation for components
+{
+   key -> field (instance)
+}
+
+
+<Field validate={[fn, fn, fn]} />
+<Field validate={fn} />
+
+validate(dataToValidate, field/this, fields)
+
+class store {
+    fields.components: {}
+    fields.keepAlive: {}
+
+    fields.get(key) // path
+    fields.add(this)
+    fields.remove(this)
+    fields.clear([key, key, key]) // clear data ==> if empty, clear all. only applied to current the closest context
+}
+
+use the new context.children and Fragment
+
+I should create a new value storage more efficient based on the path (getter, remover) <== more effective ?
+yeah but if the dev want to access the data ???
+I think I should still contains the key, value object and do an Object.values and compare the registered path
+if keep alive is active, replace with an object 
+{ path, value, component: this }
+
+voir JS Tree avec key value instead of tuple or array
+
